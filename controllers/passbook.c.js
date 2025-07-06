@@ -1,7 +1,6 @@
 const userM = require('../models/user.m');
 const passbookM = require('../models/passbook.m');
 
-
 function getDate(date_obj) {
     let day = ("0" + date_obj.getDate()).slice(-2);
     let month = ("0" + (date_obj.getMonth() + 1)).slice(-2);
@@ -16,14 +15,14 @@ function getInterest(passbookInfo) {
     else 
         return passbookInfo.passbook_deposits * 6 * 0.0055 * passbookInfo.passbook_times;
 }
+
 module.exports = {
     passbookGet: async (req, res) => {
         if(req.isUnauthenticated()){
             return res.redirect('/login');
         }
         const passbooks = await passbookM.getAll(req.user.customer_id)
-        if(passbooks.length < 10) createable = true
-        else createable = false
+        let createable = passbooks.length < 10;
         res.render('passbookList', {
             active: {passbook: true},
             layout: "working",
@@ -40,42 +39,40 @@ module.exports = {
     detailsGet: (req,res) => {
         res.redirect('/dashboard')
     },
-    
     detailsPost: async (req, res) => {
         if(req.isUnauthenticated()){
             return res.redirect('/login');
         }
-        passbookID = req.body.passbookID
+        const passbookID = req.body.passbookID;
         const passbookInfo = await passbookM.getByID(passbookID);
-        if(!passbookInfo) res.redirect('/dashboard')
-        //nếu sổ đang được truy suất không phải của tài khoản hiện tại thì quay về dashboard
+        if(!passbookInfo) return res.redirect('/dashboard');
         if (!req.user || req.user.customer_id != passbookInfo.customer_id)
-            res.redirect('/dashboard')
+            return res.redirect('/dashboard');
+
         let today_obj = new Date();
         let today = getDate(today_obj);
+        let passbookType, sendAgain, depositable, withdrawable, expdate;
+
         if(passbookInfo.passbook_type == "NO") {
             passbookType = "Không kỳ hạn";
             sendAgain = false;
             depositable = true;
             withdrawable = true;
             expdate = false;
-        }
-        else {
+        } else {
             if (passbookInfo.passbook_type == "3M") {
                 passbookType = "Kỳ hạn 3 tháng";
-                expdate_obj = await passbookM.getExpdate3M(passbookID)
-            }
-            else {
+                expdate_obj = await passbookM.getExpdate3M(passbookID);
+            } else {
                 passbookType = "Kỳ hạn 6 tháng";
-                expdate_obj = await passbookM.getExpdate6M(passbookID)
+                expdate_obj = await passbookM.getExpdate6M(passbookID);
             }
-            expdate = getDate(expdate_obj.expdate)
+            expdate = getDate(expdate_obj.expdate);
             depositable = false;
             if (expdate <= today) {
                 sendAgain = true;
                 withdrawable = true;
-            }
-            else {
+            } else {
                 withdrawable = false;
                 sendAgain = false;
             }
@@ -128,7 +125,7 @@ module.exports = {
             return res.redirect('/login');
         }
         const userInfo = await userM.getCustomerByUsername(req.user.username)
-        passbook = {
+        const passbook = {
             type: req.body.type,
             bookname: req.body.bookname,
             deposit: req.body.deposit,
@@ -145,13 +142,12 @@ module.exports = {
         if(req.isUnauthenticated()){
             return res.redirect('/login');
         }
-        passbookID = req.body.passbookID
+        const passbookID = req.body.passbookID;
         const userInfo = await userM.getCustomerByUsername(req.user.username)
         const passbookInfo = await passbookM.getByID(passbookID);
-        if(!passbookInfo) res.redirect('/dashboard')
-        //nếu sổ đang được truy suất không phải của tài khoản hiện tại thì quay về dashboard
-        if (!req.user || req.user.customer_id != passbookInfo.customer_id)
-            res.redirect('/dashboard')
+        if(!passbookInfo || req.user.customer_id != passbookInfo.customer_id) {
+            return res.redirect('/dashboard');
+        }
         let today_obj = new Date();
         let today = getDate(today_obj);
         res.render('depositMoney', {
@@ -172,10 +168,8 @@ module.exports = {
         if(req.isUnauthenticated()){
             return res.redirect('/login');
         }
-        passbookID = req.body.passbookID
-        const passbookInfo = await passbookM.getByID(passbookID);
         const userInfo = await userM.getCustomerByUsername(req.user.username)
-        data = {
+        const data = {
             depositAmount: req.body.deposit,
             passbookID: req.body.passbookID,
             customerID: userInfo.customer_id,
@@ -191,18 +185,22 @@ module.exports = {
         if(req.isUnauthenticated()){
             return res.redirect('/login');
         }
-        passbookID = req.body.passbookID
+        const passbookID = req.body.passbookID;
         const userInfo = await userM.getCustomerByUsername(req.user.username)
         const passbookInfo = await passbookM.getByID(passbookID);
-        if(!passbookInfo) res.redirect('/dashboard')
-        //nếu sổ đang được truy suất không phải của tài khoản hiện tại thì quay về dashboard
-        if (!req.user || req.user.customer_id != passbookInfo.customer_id)
-            res.redirect('/dashboard')
+        if(!passbookInfo || req.user.customer_id != passbookInfo.customer_id) {
+            return res.redirect('/dashboard');
+        }
         let today_obj = new Date();
         let today = getDate(today_obj);
-        if(passbookInfo.passbook_type == "NO") {withdrawAll = false; interest = false}
-        else {withdrawAll = true; interest = getInterest(passbookInfo)}
-        //console.log(interset)
+        let withdrawAll, interest;
+        if(passbookInfo.passbook_type == "NO") {
+            withdrawAll = false;
+            interest = false;
+        } else {
+            withdrawAll = true;
+            interest = getInterest(passbookInfo)
+        }
         res.render('withdrawMoney', {
             active: {passbook: true},
             passbookID: passbookID,
@@ -223,17 +221,13 @@ module.exports = {
         if(req.isUnauthenticated()){
             return res.redirect('/login');
         }
-        passbookID = req.body.passbookID
-        const passbookInfo = await passbookM.getByID(passbookID);
         const userInfo = await userM.getCustomerByUsername(req.user.username)
-        data = {
+        const data = {
             withdrawAmount: req.body.withdraw,
             passbookID: req.body.passbookID,
             customerID: userInfo.customer_id,
             date: req.body.date,
         }
-        // console.log(req.body.withdraw)
-        // res.send("ok")
         await passbookM.withdrawMoney(data);
         res.send({msg: "succeed"})
     }
