@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #f2f4f8;
+    color: #2c3e50;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+    min-width: calc(100% - 225px);
+    height: 97vh;
+    overflow-y: auto;
+    padding: 2rem 3rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+/* ===== HEADER ===== */
+.mainHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.mainHeader p {
+    font-size: 4.2rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #2c3e50;
+}
+
+.main .sidebarButton {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: none;
+    display: none;
+    width: 4.4rem;
+    height: 4.4rem;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+.main .sidebarButton:hover {
+    background-color: #f1f1f1;
+}
+
+/* ===== ICON ===== */
+.main .icon,
+.icon {
+    width: 4.4rem;
+    height: 4.4rem;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* ===== LIST CONTAINER ===== */
+.listContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: flex-start;
+}
+
+/* ===== CARD ===== */
+.savingbook {
+    border-radius: 1.5rem;
+    border: 1px solid #E0E0E0;
+    width: 25%;
+    min-height: 15rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 1.6rem;
+    font-weight: 500;
+    background: linear-gradient(65.44deg, #129C9C 0%, #A773FF 94.64%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.savingbook:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.savingbook p {
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.savingbook h1 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+/* ===== ADD BUTTON ===== */
+.addContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.addBtn {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 1rem;
+    width: 4.4rem;
+    height: 4.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.addBtn:hover {
+    background-color: #f1f1f1;
+}
+
+.addBtn .icon {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 1200px) {
+    .savingbook {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        min-width: 100%;
+        padding: 2rem;
+    }
+
+    .main .sidebarButton {
+        display: flex;
+    }
+
+    .savingbook {
+        width: 100%;
+    }
+
+    .mainHeader p {
+        font-size: 3.2rem;
+    }
+}

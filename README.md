@@ -5,7 +5,7 @@
 
 ### LỜI MỞ ĐẦU
 
-Đây là sản phẩm đồ án môn học *Nhập môn Công nghệ Phần mềm*, được thực hiện bởi **nhóm 8** dưới sự hướng dẫn tận tình của **thầy Bùi Tấn Lộc**. Đề tài của chúng tôi là xây dựng **Hệ thống quản lý sổ tiết kiệm**, nhằm mô phỏng quy trình tạo và quản lý các loại hình tiết kiệm của người dùng một cách khoa học và hiệu quả.
+Đây là sản phẩm đồ án môn học *Nhập môn Công nghệ Phần mềm*, được thực hiện bởi **nhóm 6A** dưới sự hướng dẫn tận tình của **thầy Trần Duy Hoàng**. Đề tài của chúng tôi là xây dựng **Hệ thống quản lý sổ tiết kiệm**, nhằm mô phỏng quy trình tạo và quản lý các loại hình tiết kiệm của người dùng một cách khoa học và hiệu quả.
 
 ---
 
